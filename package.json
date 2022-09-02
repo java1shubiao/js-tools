@@ -1,0 +1,79 @@
+{
+  "name": "@xiaoe/edu_js_tools",
+  "version": "1.0.10-t0412",
+  "description": "教培前通用工具集",
+  "main": "dist/index.js",
+  "request": "dist/request.js",
+  "repository": {
+    "type": "git",
+    "url": "http://talkcheap.xiaoeknow.com/XiaoeFE/edu_js_tools.git"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "eslint . --ext .js,.ts --fix",
+    "test": "jest --clearCache && jest",
+    "dev": "cross-env BABEL_ENV=development rollup -c -w --environment development",
+    "build": "rimraf dist/* && cross-env BABEL_ENV=production rollup -c --environment production"
+  },
+  "author": "Ken",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-typescript": "^7.13.0",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.3",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-import-resolver-webpack": "^0.13.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.5",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-watch": "^7.0.0",
+    "gh-pages": "^3.1.0",
+    "jest": "^26.6.3",
+    "jest-mock-axios": "^4.3.0",
+    "jest-pnp-resolver": "^1.2.2",
+    "jest-resolve": "^26.6.2",
+    "jest-watch-typeahead": "^0.6.1",
+    "node-sass": "^5.0.0",
+    "prettier": "^2.2.1",
+    "process": "^0.11.10",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.40.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-tslint": "^0.2.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,json,md}": [
+      "prettier --write",
+      "npm run lint",
+      "npm run test"
+    ]
+  },
+  "dependencies": {
+    "axios": "0.21.1",
+    "qs": "^6.10.1",
+    "@babel/runtime-corejs3": "^7.13.10",
+    "core-js": "3.9.1"
+  }
+}

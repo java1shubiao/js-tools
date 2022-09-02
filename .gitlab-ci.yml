@@ -1,0 +1,49 @@
+stages:
+  - build
+  
+build_master:
+  #正式包
+  stage: build
+  only:
+    - master
+    - /^release\/.*$/
+  tags:
+    - fe-group-prod-runner-1
+  script: 
+    - export project_name=$(cat package.json|awk -F "[:]" '/"name"/{print$2}')
+    - export project_name=${project_name:2:$[${#project_name}-4]}
+    - export version=`cat package.json|awk -F "[:]" '/"version"/{print$2}'`
+    - export version=${version:2:$[${#version}-4]}
+    - export message=$(git log --no-merges --pretty=format:%s -1)
+    - export author=$(git log --no-merges --pretty=format:%an -1)
+    - if [ $CI_COMMIT_REF_NAME == "master" ] && [ $(echo $version | grep -v -E "r|t" ) != "" ]; then echo "正常发包"; else exit 0; fi
+    - rm -rf node_modules/
+    - cnpm i
+    - npm run build
+    - cnpm publish
+    # - curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0ae9c0e9-3e15-49cf-9493-8f880943c6f0' -H 'Content-Type:application/json' -d '{"msgtype":"text","text":{"content":"'${project_name}'发包成功，版本号：'${version}'，提交人：'${author}'，提交信息：'${message}'"}}'
+
+
+stages:
+  - build
+  
+build_test:
+  #测试包
+  stage: build
+  only:
+    - feature/init-code
+  tags:
+    - fe-group-prod-runner-1
+  script: 
+    - export project_name=$(cat package.json|awk -F "[:]" '/"name"/{print$2}')
+    - export project_name=${project_name:2:$[${#project_name}-4]}
+    - export version=`cat package.json|awk -F "[:]" '/"version"/{print$2}'`
+    - export version=${version:2:$[${#version}-4]}
+    - export message=$(git log --pretty=format:%s -1)
+    - export author=$(git log --pretty=format:%an -1)
+    - if [ $CI_COMMIT_REF_NAME != "master" ] && [ $(echo $version | grep -E "r|t" ) != "" ]; then echo "正常发包"; else exit 0; fi
+    - rm -rf node_modules/
+    - cnpm i
+    - npm run build
+    - cnpm publish
+    # - curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0ae9c0e9-3e15-49cf-9493-8f880943c6f0' -H 'Content-Type:application/json' -d '{"msgtype":"text","text":{"content":"'${project_name}'发包成功，版本号：'${version}'，提交人：'${author}'，提交信息：'${message}'"}}'
